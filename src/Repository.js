@@ -65,6 +65,7 @@ export default class Repository extends Component {
 const REPOSITORY_QUERY = gql`
   query($owner: String!, $name: String!, $issueCursor: String) {
     repository(owner: $owner, name: $name) {
+      id
       name
       url
       issues(first: 3, after: $issueCursor) {
