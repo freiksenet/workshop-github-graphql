@@ -3,6 +3,7 @@ import ApolloClient, { gql } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import User from './User';
 import Repository from './Repository';
+import Issue from './Issue';
 import logo from './logo.svg';
 import './App.css';
 
@@ -19,12 +20,43 @@ const client = new ApolloClient({
       },
     });
   },
+  cacheRedirects: {
+    Query: {
+      node: (parent, { id }, { getCacheKey }) => {
+        return getCacheKey({ __typename: 'Issue', id });
+      },
+    },
+  },
 });
 
 class App extends Component {
   state = {
     show: 'User',
+    issueId: null,
   };
+
+  handleShowIssue = issueId => {
+    this.setState({
+      show: 'Issue',
+      issueId,
+    });
+  };
+
+  renderBody() {
+    if (this.state.show === 'Issue') {
+      return <Issue id={this.state.issueId} />;
+    } else if (this.state.show === 'User') {
+      return <User />;
+    } else {
+      return (
+        <Repository
+          owner="freiksenet"
+          name="workshop-github-graphql"
+          showComments={this.handleShowIssue}
+        />
+      );
+    }
+  }
 
   render() {
     return (
@@ -35,11 +67,7 @@ class App extends Component {
             Repository
           </button>
         </div>
-        {this.state.show === 'User' ? (
-          <User />
-        ) : (
-          <Repository owner="freiksenet" name="workshop-github-graphql" />
-        )}
+        {this.renderBody()}
       </ApolloProvider>
     );
   }

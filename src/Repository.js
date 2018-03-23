@@ -14,6 +14,7 @@ export default class Repository extends Component {
           <div>Url: {data.repository.url}</div>
           <Issues
             issues={data.repository.issues}
+            showComments={this.props.showComments}
             loadMore={() => {
               this.loadMoreIssues(data, fetchMore);
             }}
@@ -73,6 +74,7 @@ const REPOSITORY_QUERY = gql`
           endCursor
         }
         nodes {
+          id
           author {
             login
           }

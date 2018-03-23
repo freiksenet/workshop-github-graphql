@@ -14,6 +14,9 @@ export default class Issues extends Component {
               <div>{issue.author.login}</div>
               <div>{issue.body}</div>
               <div>{issue.createdAt}</div>
+              <button onClick={() => this.props.showComments(issue.id)}>
+                Comments
+              </button>
             </div>
           ))}
         </div>
