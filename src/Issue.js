@@ -64,14 +64,19 @@ const IssueFragment = gql`
 
 const CommentsFragment = gql`
   fragment CommentsFragment on Issue {
-    comments(first: 3) {
+    comments(first: 100) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       nodes {
         author {
           login
         }
         createdAt
         bodyText
-        reactions(first: 1000) {
+        reactions(first: 100) {
           nodes {
             content
           }

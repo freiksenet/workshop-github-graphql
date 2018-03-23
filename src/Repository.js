@@ -68,7 +68,7 @@ const REPOSITORY_QUERY = gql`
       id
       name
       url
-      issues(first: 3, after: $issueCursor) {
+      issues(first: 20, after: $issueCursor) {
         totalCount
         pageInfo {
           hasNextPage
