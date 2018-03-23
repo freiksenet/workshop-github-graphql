@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 export default class Issues extends Component {
+  componentDidMount() {
+    this.props.subscribeToMore();
+  }
+
   render() {
     return (
       <div style={{ marginTop: 20 }}>

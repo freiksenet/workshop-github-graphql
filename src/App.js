@@ -16,7 +16,7 @@ const client = new ApolloClient({
     operation.setContext({
       headers: {
         // authorization: `Bearer ${token}`,
-        authorization: 'Bearer',
+        authorization: 'Bearer 2e8479c5afb3fface60f5f4d8d8d04960f31c2f6',
       },
     });
   },

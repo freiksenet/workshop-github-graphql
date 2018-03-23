@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import Issues from './Issues';
 
 export default class Repository extends Component {
-  renderContent = ({ loading, error, data, fetchMore }) => {
+  renderContent = ({ loading, error, data, fetchMore, subscribeToMore }) => {
     if (loading) {
       return <div>Repository loading</div>;
     } else {
@@ -17,6 +17,13 @@ export default class Repository extends Component {
             showComments={this.props.showComments}
             loadMore={() => {
               this.loadMoreIssues(data, fetchMore);
+            }}
+            subscribeToMore={() => {
+              subscribeToMore({
+                document: REPOSITORY_SUBSRCIPTION_QUERY,
+                variables: data.repository.issues.nodes.map(node => node.id),
+                updateQuery: () => {},
+              });
             }}
           />
         </div>
@@ -82,6 +89,17 @@ const REPOSITORY_QUERY = gql`
           body
           createdAt
         }
+      }
+    }
+  }
+`;
+
+const REPOSITORY_SUBSRCIPTION_QUERY = gql`
+  subscription($ids: [ID!]) {
+    onIssuesChanged(ids: $ids) {
+      issueChanged {
+        id
+        body
       }
     }
   }

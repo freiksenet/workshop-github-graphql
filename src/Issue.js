@@ -4,6 +4,20 @@ import { Query } from 'react-apollo';
 import Comments from './Comments';
 
 export default class Issue extends Component {
+  addComment(client, data, newComment) {
+    console.log(client, data, newComment);
+    const newData = {
+      node: {
+        ...data.node,
+        comments: {
+          ...data.node.comments,
+          nodes: [...data.node.comments.nodes, newComment.commentEdge.node],
+        },
+      },
+    };
+    client.writeQuery({ query: IssueQuery, data: newData });
+  }
+
   renderIssue(issue) {
     return (
       <div style={{ padding: 5, borderTop: '1px solid black' }}>
@@ -13,6 +27,7 @@ export default class Issue extends Component {
       </div>
     );
   }
+
   render() {
     return (
       <Query
@@ -41,7 +56,13 @@ export default class Issue extends Component {
             return (
               <div>
                 {this.renderIssue(data.node)}
-                <Comments comments={data.node.comments} />
+                <Comments
+                  issueId={data.node.id}
+                  comments={data.node.comments}
+                  addComment={addCommentData =>
+                    this.addComment(client, data, addCommentData)
+                  }
+                />
               </div>
             );
           }
@@ -71,6 +92,7 @@ const CommentsFragment = gql`
         endCursor
       }
       nodes {
+        id
         author {
           login
         }
